@@ -1,0 +1,31 @@
+name: cognidrift behavioral report
+on:
+  push:
+    branches: [main]
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install cognidrift
+        run: pip install -e .
+      - name: Run behavioral analysis on sample trace
+        run: |
+          mkdir -p report
+          cognidrift analyze \
+            --trace ./runs/sample_runs/run_anchoring.json \
+            --output ./report/ \
+            --no-viz
+      - name: Commit updated report
+        run: |
+          git config user.email "action@github.com"
+          git config user.name "cognidrift-bot"
+          git add ./report/behavior_report.json
+          git diff --cached --quiet || git commit -m "chore: update behavioral report [skip ci]"
+          git push

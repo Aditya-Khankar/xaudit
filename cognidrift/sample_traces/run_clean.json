@@ -1,0 +1,142 @@
+{
+  "trace_id": "run_clean_001",
+  "agent_name": "data_agent",
+  "task": "Find the current exchange rate between USD and EUR and summarize recent trends",
+  "events": [
+    {
+      "step": 0,
+      "type": "tool_call",
+      "tool": "web_search",
+      "input": {"query": "USD to EUR exchange rate today"},
+      "output": {"results": ["Current USD/EUR rate: 0.92"]},
+      "success": true,
+      "latency_ms": 312
+    },
+    {
+      "step": 1,
+      "type": "tool_call",
+      "tool": "financial_data",
+      "input": {"pair": "USD/EUR", "period": "30d"},
+      "output": {"data": {"current": 0.92, "30d_avg": 0.91, "trend": "slight_appreciation"}},
+      "success": true,
+      "latency_ms": 456
+    },
+    {
+      "step": 2,
+      "type": "retrieval",
+      "tool": "financial_data",
+      "input": {"query": "EUR/USD historical rates"},
+      "output": {"text": "EUR has appreciated 1.2% against USD over the past month driven by ECB rate decisions"},
+      "success": true,
+      "latency_ms": 234
+    },
+    {
+      "step": 3,
+      "type": "llm_call",
+      "tool": null,
+      "input": {"messages": 3},
+      "output": {"text": "Current rate identified. Now checking for trend context."},
+      "success": true,
+      "latency_ms": 567
+    },
+    {
+      "step": 4,
+      "type": "tool_call",
+      "tool": "web_search",
+      "input": {"query": "EUR USD trend analysis recent"},
+      "output": {"results": ["EUR strengthened against USD due to hawkish ECB stance"]},
+      "success": true,
+      "latency_ms": 345
+    },
+    {
+      "step": 5,
+      "type": "tool_call",
+      "tool": "calculator",
+      "input": {"expression": "((0.92 - 0.91) / 0.91) * 100"},
+      "output": {"result": 1.0989},
+      "success": true,
+      "latency_ms": 89
+    },
+    {
+      "step": 6,
+      "type": "retrieval",
+      "tool": "financial_data",
+      "input": {"query": "ECB rate decision impact on EUR"},
+      "output": {"text": "ECB maintained rates at 4.0% signaling data-dependent approach to future cuts"},
+      "success": true,
+      "latency_ms": 278
+    },
+    {
+      "step": 7,
+      "type": "tool_call",
+      "tool": "web_search",
+      "input": {"query": "Fed rate decision impact on USD"},
+      "output": {"results": ["Federal Reserve held rates steady with markets pricing in one cut by year end"]},
+      "success": true,
+      "latency_ms": 312
+    },
+    {
+      "step": 8,
+      "type": "tool_call",
+      "tool": "financial_data",
+      "input": {"pair": "USD/EUR", "period": "90d"},
+      "output": {"data": {"90d_avg": 0.90, "90d_high": 0.93, "90d_low": 0.88}},
+      "success": true,
+      "latency_ms": 234
+    },
+    {
+      "step": 9,
+      "type": "tool_call",
+      "tool": "calculator",
+      "input": {"expression": "0.93 - 0.88"},
+      "output": {"result": 0.05},
+      "success": true,
+      "latency_ms": 67
+    },
+    {
+      "step": 10,
+      "type": "llm_call",
+      "tool": null,
+      "input": {"messages": 8},
+      "output": {"text": "Synthesizing all data points for comprehensive summary"},
+      "success": true,
+      "latency_ms": 890
+    },
+    {
+      "step": 11,
+      "type": "tool_call",
+      "tool": "web_search",
+      "input": {"query": "USD EUR forecast next month"},
+      "output": {"results": ["Analysts expect EUR/USD to trade between 0.90-0.94 range"]},
+      "success": true,
+      "latency_ms": 356
+    },
+    {
+      "step": 12,
+      "type": "llm_call",
+      "tool": null,
+      "input": {"messages": 10},
+      "output": {"text": "Complete analysis ready"},
+      "success": true,
+      "latency_ms": 678
+    },
+    {
+      "step": 13,
+      "type": "llm_call",
+      "tool": null,
+      "input": {"messages": 11},
+      "output": {"text": "USD to EUR exchange rate summary: Current rate 0.92 EUR per USD. The Euro has appreciated approximately 1.1% against the Dollar over the past 30 days. 90-day range: 0.88-0.93. Key drivers include divergent central bank policies with ECB maintaining rates while markets price in Fed cuts."},
+      "success": true,
+      "latency_ms": 1100
+    },
+    {
+      "step": 14,
+      "type": "llm_call",
+      "tool": null,
+      "input": {"messages": 12},
+      "output": {"text": "Final summary with trend analysis complete. All data cross-referenced from multiple sources."},
+      "success": true,
+      "latency_ms": 456
+    }
+  ]
+}

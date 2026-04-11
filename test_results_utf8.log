@@ -1,0 +1,67 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.11.9, pytest-9.0.2, pluggy-1.6.0 -- C:\Users\Asus\AppData\Local\Programs\Python\Python311\python.exe
+cachedir: .pytest_cache
+rootdir: D:\Cognidrift
+configfile: pyproject.toml
+plugins: anyio-4.12.1, cov-7.1.0
+collecting ... collected 27 items
+
+tests/test_adapters.py::test_raw_adapter PASSED                          [  3%]
+tests/test_adapters.py::test_format_detection_raw PASSED                 [  7%]
+tests/test_adapters.py::test_format_detection_langsmith PASSED           [ 11%]
+tests/test_adapters.py::test_format_detection_langfuse PASSED            [ 14%]
+tests/test_adapters.py::test_format_detection_unknown PASSED             [ 18%]
+tests/test_adapters.py::test_get_adapter_unknown PASSED                  [ 22%]
+tests/test_anchoring.py::test_anchoring_detected PASSED                  [ 25%]
+tests/test_anchoring.py::test_anchoring_not_detected PASSED              [ 29%]
+tests/test_anchoring.py::test_anchoring_insufficient_retrievals PASSED   [ 33%]
+tests/test_confirmation.py::test_confirmation_detected FAILED            [ 37%]
+tests/test_confirmation.py::test_confirmation_not_detected PASSED        [ 40%]
+tests/test_confirmation.py::test_confirmation_insufficient_events PASSED [ 44%]
+tests/test_degradation.py::test_degradation_detected PASSED              [ 48%]
+tests/test_degradation.py::test_degradation_not_detected PASSED          [ 51%]
+tests/test_degradation.py::test_degradation_too_short PASSED             [ 55%]
+tests/test_degradation.py::test_degradation_complete_failure PASSED      [ 59%]
+tests/test_loop_detector.py::test_loop_detected PASSED                   [ 62%]
+tests/test_loop_detector.py::test_loop_not_detected PASSED               [ 66%]
+tests/test_loop_detector.py::test_loop_constant_sequence PASSED          [ 70%]
+tests/test_loop_detector.py::test_loop_too_short PASSED                  [ 74%]
+tests/test_metrics.py::test_efficiency PASSED                            [ 77%]
+tests/test_metrics.py::test_exploration_score PASSED                     [ 81%]
+tests/test_metrics.py::test_recovery_time_no_failures PASSED             [ 85%]
+tests/test_metrics.py::test_recovery_time_with_failures PASSED           [ 88%]
+tests/test_sunk_cost.py::test_sunk_cost_detected PASSED                  [ 92%]
+tests/test_sunk_cost.py::test_sunk_cost_not_detected PASSED              [ 96%]
+tests/test_sunk_cost.py::test_sunk_cost_no_failures PASSED               [100%]
+
+================================== FAILURES ===================================
+_________________________ test_confirmation_detected __________________________
+
+    def test_confirmation_detected():
+        """Tool diversity narrows from 4 tools to 1 ù should detect."""
+        events = [
+            # First half: diverse tools
+            make_event(0, "tool_call", "web_search"),
+            make_event(1, "tool_call", "arxiv_search"),
+            make_event(2, "tool_call", "citation_finder"),
+            make_event(3, "tool_call", "document_reader"),
+            make_event(4, "tool_call", "web_search"),
+            make_event(5, "tool_call", "arxiv_search"),
+            # Second half: only web_search
+            make_event(6, "tool_call", "web_search"),
+            make_event(7, "tool_call", "web_search"),
+            make_event(8, "tool_call", "web_search"),
+            make_event(9, "tool_call", "web_search"),
+            make_event(10, "tool_call", "web_search"),
+            make_event(11, "tool_call", "web_search"),
+        ]
+        trace = make_trace(events)
+        result = ConfirmationDetector().detect(trace)
+>       assert result.detected is True
+E       AssertionError: assert False is True
+E        +  where False = DetectorResult(detector_name='confirmation_bias', detected=False, score=0.1279761904761905, threshold=0.6, evidence={'tool_diversity_slope': -0.5119, 'unique_tools_first_half': 4, 'unique_tools_second_half': 1, 'diversity_values': [4, 4, 4, 3, 2, 2, 1, 1], 'tool_usage_distribution': {'web_search': 8, 'arxiv_search': 2, 'citation_finder': 1, 'document_reader': 1}}, interpretation='Tool diversity slope: -0.512 per window. Tool diversity relatively stable ù no confirmation bias detected.', detector_version='1.0.0').detected
+
+tests\test_confirmation.py:25: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_confirmation.py::test_confirmation_detected - AssertionErro...
+======================== 1 failed, 26 passed in 0.30s =========================

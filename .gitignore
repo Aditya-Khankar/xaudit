@@ -1,0 +1,15 @@
+.env
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+dist/
+build/
+*.egg-info/
+.coverage
+htmlcov/
+behavioral_timeline.png
+generated_*.json
+.DS_Store
+demo_output/
+cognidrift.log

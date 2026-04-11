@@ -1,0 +1,119 @@
+{
+  "trace_id": "run_anchoring_001",
+  "agent_name": "research_agent",
+  "task": "Research the current best practices for RAG evaluation \u00e2\u20ac\u201d find the most important metrics and methods",
+  "total_steps": 20,
+  "analysis_timestamp": "2026-04-11T08:52:18.349141+00:00",
+  "overall_rationality_score": 1.0,
+  "biases_detected": [],
+  "detectors": {
+    "anchoring": {
+      "detected": false,
+      "score": 0.5412,
+      "threshold": 0.6,
+      "evidence": {
+        "first_retrieval_similarity_to_answer": 0.541,
+        "avg_later_retrieval_similarity": 0.074,
+        "first_retrieval_step": 0,
+        "answer_step": 19,
+        "total_retrievals": 3
+      },
+      "interpretation": "Answer was 54% similar to first retrieval. Later retrievals averaged 7% similarity. No significant anchoring detected.",
+      "version": "1.0.0"
+    },
+    "confirmation_bias": {
+      "detected": false,
+      "score": 0.0,
+      "threshold": 0.6,
+      "evidence": {
+        "tool_diversity_slope": 0.1,
+        "unique_tools_first_half": 3,
+        "unique_tools_second_half": 3,
+        "diversity_values": [
+          3,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3,
+          3
+        ],
+        "tool_usage_distribution": {
+          "arxiv_search": 2,
+          "web_search": 7,
+          "document_reader": 4
+        }
+      },
+      "interpretation": "Tool diversity slope: 0.100 per window. Tool diversity relatively stable \u2014 no confirmation bias detected.",
+      "version": "1.0.0"
+    },
+    "sunk_cost": {
+      "detected": false,
+      "score": 0.0,
+      "threshold": 0.5,
+      "evidence": {
+        "reason": "No failure events in trace \u2014 sunk cost not applicable."
+      },
+      "interpretation": "No failure events in trace \u2014 sunk cost not applicable.",
+      "version": "1.0.0"
+    },
+    "loop_detection": {
+      "detected": false,
+      "score": 0.2424,
+      "threshold": 0.65,
+      "evidence": {
+        "max_autocorrelation": 0.242,
+        "dominant_lag": 5,
+        "sequence_length": 20,
+        "unique_tools": 4,
+        "tool_vocabulary": {
+          "arxiv_search": 0,
+          "web_search": 1,
+          "llm_call": 2,
+          "document_reader": 3
+        }
+      },
+      "interpretation": "Peak autocorrelation 0.24 at lag 5. No significant action loop detected.",
+      "version": "1.0.0"
+    },
+    "degradation": {
+      "detected": false,
+      "score": 0.0,
+      "threshold": 0.4,
+      "evidence": {
+        "reason": "Agent had 100% success rate throughout \u2014 no degradation."
+      },
+      "interpretation": "Agent had 100% success rate throughout \u2014 no degradation.",
+      "version": "1.0.0"
+    }
+  },
+  "metrics": {
+    "efficiency": {
+      "value": 0.65,
+      "goal_advancing_actions": 13,
+      "total_actions": 20,
+      "interpretation": "65% of actions directly advanced the goal."
+    },
+    "exploration_score": {
+      "value": 0.5,
+      "unique_tools_used": 3,
+      "total_tools_available": 6,
+      "tool_usage_distribution": {
+        "arxiv_search": 2,
+        "web_search": 7,
+        "document_reader": 4
+      },
+      "interpretation": "Used 3 of ~6 available tools."
+    },
+    "recovery_time": {
+      "value": 0,
+      "unit": "steps",
+      "failure_events": 0,
+      "avg_steps_to_recovery": 0,
+      "per_failure_recovery": [],
+      "interpretation": "No failure events \u2014 recovery time not applicable."
+    }
+  }
+}
