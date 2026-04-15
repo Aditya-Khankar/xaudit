@@ -1,7 +1,7 @@
 from tests.conftest import make_event, make_trace
-from cognidrift.metrics.efficiency import compute_efficiency
-from cognidrift.metrics.exploration_score import compute_exploration_score
-from cognidrift.metrics.recovery_time import compute_recovery_time
+from xaudit.metrics.efficiency import compute_efficiency
+from xaudit.metrics.exploration_score import compute_exploration_score
+from xaudit.metrics.recovery_time import compute_recovery_time
 
 
 def test_efficiency():

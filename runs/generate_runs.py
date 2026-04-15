@@ -1,5 +1,5 @@
 """Generates synthetic agent traces using LangGraph + Gemini SDK (v2).
-Called by `cognidrift generate` command. Never called by analyze.
+Called by `xaudit generate` command. Never called by analyze.
 """
 
 import json

@@ -1,16 +1,16 @@
 .PHONY: demo test lint format install install-dev clean
 
 demo:
-	cognidrift demo
+	xaudit demo
 
 test:
 	pytest tests/ -v
 
 lint:
-	ruff check cognidrift/
+	ruff check xaudit/
 
 format:
-	black cognidrift/
+	black xaudit/
 
 install:
 	pip install -e .

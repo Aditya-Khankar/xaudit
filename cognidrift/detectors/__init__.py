@@ -1,1 +1,0 @@
-# cognidrift detectors module

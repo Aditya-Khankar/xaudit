@@ -1,7 +1,7 @@
 import json
 from tests.conftest import make_event, make_trace
-from cognidrift.recorder.format_adapters import RawJSONAdapter, LangSmithAdapter, LangfuseAdapter, get_adapter
-from cognidrift.utils.format_detect import detect_format
+from xaudit.recorder.format_adapters import RawJSONAdapter, LangSmithAdapter, LangfuseAdapter, get_adapter
+from xaudit.utils.format_detect import detect_format
 import pytest
 
 

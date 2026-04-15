@@ -15,10 +15,10 @@ If below 3.11, install from https://python.org/downloads
 ## Standard install (Analysis only — no API key needed)
 
 ```bash
-git clone https://github.com/Aditya-Khankar/cognidrift
-cd cognidrift
+git clone https://github.com/Aditya-Khankar/xaudit
+cd xaudit
 pip install -e .
-cognidrift demo
+xaudit demo
 ```
 
 That's it. The demo runs immediately with no configuration.
@@ -51,7 +51,7 @@ If you see a quota or permission error:
 
 - Use `python` not `python3`
 - Use Command Prompt or PowerShell — Git Bash may have path issues
-- If the `cognidrift` command is not found after install, run: `python -m cognidrift`
+- If the `xaudit` command is not found after install, run: `python -m xaudit`
 
 ## Troubleshooting?
 
@@ -61,10 +61,10 @@ pip install --upgrade pip setuptools wheel
 pip install -e .
 ```
 
-**Cognidrift command not found after installation**
+**XAudit command not found after installation**
 ```bash
 python -m pip install -e .
-python -m cognidrift demo
+python -m xaudit demo
 ```
 
 **`ModuleNotFoundError` on any import**
@@ -76,5 +76,5 @@ pip install -e .
 **On Windows: encoding errors in output**
 ```bash
 set PYTHONIOENCODING=utf-8
-cognidrift demo
+xaudit demo
 ```

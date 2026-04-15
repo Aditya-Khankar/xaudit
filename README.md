@@ -1,26 +1,26 @@
-# Cognidrift
+# XAudit
 
 > Your agent completed the task. Did it reason well?
 
-Detect anchoring bias, confirmation bias, sunk cost fallacy, action loops, and performance degradation in any autonomous agent trace. 
+Detect primacy_dominance bias, query_entropy_collapse bias, sunk cost fallacy, action loops, and performance context_decay in any autonomous agent trace. 
 
 ![Python](https://img.shields.io/badge/python-3.11+-blue?style=flat-square)
 ![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)
 ![Formats](https://img.shields.io/badge/formats-LangSmith%20%7C%20Langfuse%20%7C%20Raw%20JSON-orange?style=flat-square)
 
 ```bash
-$ cognidrift demo
+$ xaudit demo
 
 Overall rationality score: 0.81
-Biases detected: anchoring
+Biases detected: primacy_dominance
   → Answer was 93% similar to first retrieval. Later retrievals averaged 9% similarity.
 
 Detector            Score   Threshold   Detected
-anchoring           0.926   0.60        YES
-confirmation_bias   0.000   0.60        no
-sunk_cost           0.000   0.50        no
+primacy_dominance           0.926   0.60        YES
+query_entropy_collapse_bias   0.000   0.60        no
+strategy_persistence           0.000   0.50        no
 loop_detection      0.242   0.65        no
-degradation         0.000   0.40        no
+context_decay         0.000   0.40        no
 
 Timeline saved: ./demo_output/behavioral_timeline.png
 Report saved:   ./demo_output/behavior_report.json
@@ -33,10 +33,10 @@ Report saved:   ./demo_output/behavior_report.json
 **Requirements:** Python 3.11+
 
 ```bash
-git clone https://github.com/Aditya-Khankar/cognidrift
-cd cognidrift
+git clone https://github.com/Aditya-Khankar/xaudit
+cd xaudit
 pip install -e .
-cognidrift demo
+xaudit demo
 ```
 
 No API key or configuration required. Results in under 60 seconds.
@@ -49,17 +49,17 @@ No API key or configuration required. Results in under 60 seconds.
 
 ## 🎨 Themes & Logging
 
-Cognidrift is built for a premium developer experience. It ships with two visual themes and professional stylized logging.
+XAudit is built for a premium developer experience. It ships with two visual themes and professional stylized logging.
 
 ```bash
-cognidrift demo --theme amber       # warm gold on dark (default)
-cognidrift demo --theme nebula      # legendary purple & plain text
+xaudit demo --theme amber       # warm gold on dark (default)
+xaudit demo --theme nebula      # legendary purple & plain text
 ```
 
 **Save your preferred theme:**
 
 ```bash
-cognidrift config set theme amber
+xaudit config set theme amber
 ```
 
 **Premium Logging:**
@@ -69,10 +69,10 @@ Run any command with `--debug` to enable high-fidelity, stylized logs powered by
 
 ## ⚡ High-Performance Batch Analysis
 
-Cognidrift features a **Dual-Mode analysis engine** designed for both speed and clarity:
+XAudit features a **Dual-Mode analysis engine** designed for both speed and clarity:
 
 - **Smooth Mode:** For 1–5 traces, analysis is sequential with live status indicators.
-- **Parallel Mode:** For batches of >5 traces, Cognidrift automatically uses **multi-core parallel processing** via `ProcessPoolExecutor`.
+- **Parallel Mode:** For batches of >5 traces, XAudit automatically uses **multi-core parallel processing** via `ProcessPoolExecutor`.
 
 Batch analysis is roughly **5–10x faster** on multi-core systems.
 
@@ -83,19 +83,19 @@ Batch analysis is roughly **5–10x faster** on multi-core systems.
 Fine-tune the auditing sensitivity globally to match your specific agent architecture:
 
 ```bash
-# Set anchoring sensitivity to 55%
-cognidrift config set anchoring.threshold 0.55
+# Set primacy_dominance sensitivity to 55%
+xaudit config set primacy_dominance.threshold 0.55
 
 # View all custom settings
-cognidrift config get
+xaudit config get
 ```
 
-## Why Cognidrift?
+## Why XAudit?
 
 Current agent observability tools like LangSmith and Langfuse primarily track *whether* an agent crashed.  
-**Cognidrift** analyzes *how* your agent reasoned—and whether that reasoning remained rational throughout the task.
+**XAudit** analyzes *how* your agent reasoned—and whether that reasoning remained rational throughout the task.
 
-An agent that completes a task by "anchoring" on its first result—ignoring 15 steps of contradicting evidence—is failing silently. Cognidrift surfaces these invisible reasoning failures.
+An agent that completes a task by "primacy_dominance" on its first result—ignoring 15 steps of contradicting evidence—is failing silently. XAudit surfaces these invisible reasoning failures.
 
 ---
 
@@ -103,39 +103,39 @@ An agent that completes a task by "anchoring" on its first result—ignoring 15 
 
 | Bias | Description | Method |
 |---|---|---|
-| **Anchoring** | Over-relies on first retrieval; ignores later evidence | TF-IDF cosine similarity |
-| **Confirmation bias** | Tool usage narrows — seeking confirmation over exploration | Linear regression slope |
+| **PrimacyDominance** | Over-relies on first retrieval; ignores later evidence | TF-IDF cosine similarity |
+| **QueryEntropyCollapse bias** | Tool usage narrows — seeking query_entropy_collapse over exploration | Linear regression slope |
 | **Sunk cost** | Persists with failing strategy past rational pivot point | Step counter + input variation |
 | **Loop detection** | Repeating action sequences with no forward progress | Autocorrelation |
-| **Degradation** | Efficiency declining mid-session — context window breakdown | CUSUM changepoint |
+| **ContextDecay** | Efficiency declining mid-session — context window breakdown | CUSUM changepoint |
 
-Cognidrift applies disambiguation logic to reduce false positives. Each detector is aware of its own limitations—see [Detector limitations](#detector-limitations) for details.
+XAudit applies disambiguation logic to reduce false positives. Each detector is aware of its own limitations—see [Detector limitations](#detector-limitations) for details.
 
 ---
 
 ## Try your own traces
 
 ```bash
-cognidrift analyze --trace ./my_trace.json
-cognidrift analyze --trace ./traces/
-cognidrift analyze --trace ./trace.json --format langsmith
-cognidrift analyze --trace ./trace.json --output ./results/
+xaudit analyze --trace ./my_trace.json
+xaudit analyze --trace ./traces/
+xaudit analyze --trace ./trace.json --format langsmith
+xaudit analyze --trace ./trace.json --output ./results/
 ```
 
 ---
 
 ## Output
 
-Cognidrift generates two primary artifacts in your output directory:
+XAudit generates two primary artifacts in your output directory:
 
 **`behavior_report.json`** — Detailed results including scores, evidence, and mathematical interpretations.
 
 ```json
 {
   "overall_rationality_score": 0.815,
-  "biases_detected": ["anchoring"],
+  "biases_detected": ["primacy_dominance"],
   "detectors": {
-    "anchoring": {
+    "primacy_dominance": {
       "detected": true,
       "score": 0.926,
       "threshold": 0.60,
@@ -143,7 +143,7 @@ Cognidrift generates two primary artifacts in your output directory:
         "first_retrieval_similarity_to_answer": 0.926,
         "avg_later_retrieval_similarity": 0.088
       },
-      "interpretation": "Answer was 93% similar to first retrieval. Later retrievals averaged 9% similarity. Anchoring pattern detected."
+      "interpretation": "Answer was 93% similar to first retrieval. Later retrievals averaged 9% similarity. PrimacyDominance pattern detected."
     }
   }
 }
@@ -157,9 +157,9 @@ Cognidrift generates two primary artifacts in your output directory:
 
 | Format | Usage |
 |---|---|
-| Raw JSON (native) | `cognidrift analyze --trace ./trace.json` |
-| LangSmith export | `cognidrift analyze --trace ./trace.json --format langsmith` |
-| Langfuse export | `cognidrift analyze --trace ./trace.json --format langfuse` |
+| Raw JSON (native) | `xaudit analyze --trace ./trace.json` |
+| LangSmith export | `xaudit analyze --trace ./trace.json --format langsmith` |
+| Langfuse export | `xaudit analyze --trace ./trace.json --format langfuse` |
 
 Format is auto-detected by default. Use `--format` to manually override.
 
@@ -190,7 +190,7 @@ Format is auto-detected by default. Use `--format` to manually override.
 
 ```python
 import json
-from cognidrift import analyze_trace
+from xaudit import analyze_trace
 
 with open("my_trace.json") as f:
     trace = json.load(f)
@@ -213,7 +213,7 @@ The demo analyzes a pre-packaged research agent trace. In this scenario, the age
 - **Steps 1–18:** Retrieved papers on LSTMs, RNNs, and other architectures.
 - **Step 19:** Wrote a final answer — 93% similar to step 0, completely ignoring 18 steps of new data.
 
-Cognidrift flags this as anchoring. Although the agent "completed" the task without crashing, its reasoning process was flawed.
+XAudit flags this as primacy_dominance. Although the agent "completed" the task without crashing, its reasoning process was flawed.
 
 ---
 
@@ -232,26 +232,26 @@ Open `.env` and insert your Gemini API key.
 > Get a free key at **[Google AI Studio](https://aistudio.google.com/apikey)**. Having trouble? See the troubleshooting guide in [INSTALL.md](INSTALL.md#troubleshooting-the-generator).
 
 ```bash
-cognidrift generate --scenarios anchoring,sunk_cost --output ./runs/
+xaudit generate --scenarios primacy_dominance,strategy_persistence --output ./runs/
 ```
 
-Available scenarios: `anchoring`, `confirmation`, `sunk_cost`, `loop`, `degradation`, `clean`, `all`.
+Available scenarios: `primacy_dominance`, `query_entropy_collapse`, `strategy_persistence`, `loop`, `context_decay`, `clean`, `all`.
 
 ---
 
 ## Detector limitations
 
-Cognidrift uses mathematical proxies to detect behavioral patterns. We prioritize transparency about where these heuristics might vary:
+XAudit uses mathematical proxies to detect behavioral patterns. We prioritize transparency about where these heuristics might vary:
 
 | Detector | Known Limitation | Disambiguation Applied |
 |---|---|---|
-| Anchoring | TF-IDF can't distinguish copying from criticizing | Stance divergence scoring |
-| Confirmation bias | Deep dives sometimes naturally narrow tool usage | Success-rate gating |
+| PrimacyDominance | TF-IDF can't distinguish copying from criticizing | Stance divergence scoring |
+| QueryEntropyCollapse bias | Deep dives sometimes naturally narrow tool usage | Success-rate gating |
 | Sunk cost | Rational retries can look like sunk cost | Input variation analysis |
 | Loop detection | Structured iteration (e.g., scraping) can look periodic | Output entropy gating |
-| Degradation | Task difficulty can mimic performance decay | Baseline-relative CUSUM |
+| ContextDecay | Task difficulty can mimic performance decay | Baseline-relative CUSUM |
 
-Cognidrift provides heuristic signals, not definitive psychological verdicts.
+XAudit provides heuristic signals, not definitive psychological verdicts.
 
 ---
 
@@ -273,7 +273,7 @@ trace.json → format_detect → adapter → AgentTrace
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for setup instructions and guidelines on adding new detectors or format adapters.
 
-Found a bug? [Open an issue](https://github.com/Aditya-Khankar/cognidrift/issues).
+Found a bug? [Open an issue](https://github.com/Aditya-Khankar/xaudit/issues).
 
 ---
 

@@ -11,13 +11,13 @@ htmlcov/
 behavioral_timeline.png
 generated_*.json
 demo_output/
-cognidrift.log
+xaudit.log
 
 # Internal planning documents
-cognidrift_complete_prompt.md
-cognidrift_context.md
-cognidrift_prd.md
-cognidrift_techstack.md
+xaudit_complete_prompt.md
+xaudit_context.md
+xaudit_prd.md
+xaudit_techstack.md
 
 # Test artifacts
 test_results.log

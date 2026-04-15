@@ -1,6 +1,6 @@
 """Shared fixtures for all tests."""
 import pytest
-from cognidrift.recorder.trace_recorder import AgentEvent, AgentTrace
+from xaudit.recorder.trace_recorder import AgentEvent, AgentTrace
 
 
 def make_event(step: int, event_type="tool_call", tool="web_search",

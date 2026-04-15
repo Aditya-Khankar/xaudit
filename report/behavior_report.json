@@ -1,15 +1,15 @@
 {
-  "trace_id": "run_anchoring_001",
+  "trace_id": "run_primacy_dominance_001",
   "agent_name": "research_agent",
   "task": "Research the current best practices for RAG evaluation — find the most important metrics and methods",
   "total_steps": 20,
   "analysis_timestamp": "2026-04-12T10:37:10.240429+00:00",
   "overall_rationality_score": 0.8147,
   "biases_detected": [
-    "anchoring"
+    "primacy_dominance"
   ],
   "detectors": {
-    "anchoring": {
+    "primacy_dominance": {
       "detected": true,
       "score": 0.9264,
       "threshold": 0.6,
@@ -20,10 +20,10 @@
         "answer_step": 19,
         "total_retrievals": 3
       },
-      "interpretation": "Answer was 93% similar to first retrieval. Later retrievals averaged 9% similarity. Anchoring pattern detected.",
+      "interpretation": "Answer was 93% similar to first retrieval. Later retrievals averaged 9% similarity. PrimacyDominance pattern detected.",
       "version": "1.0.0"
     },
-    "confirmation_bias": {
+    "query_entropy_collapse_bias": {
       "detected": false,
       "score": 0.0,
       "threshold": 0.6,
@@ -48,10 +48,10 @@
           "document_reader": 4
         }
       },
-      "interpretation": "Tool diversity slope: 0.100 per window. Tool diversity relatively stable — no confirmation bias detected.",
+      "interpretation": "Tool diversity slope: 0.100 per window. Tool diversity relatively stable — no query_entropy_collapse bias detected.",
       "version": "1.0.0"
     },
-    "sunk_cost": {
+    "strategy_persistence": {
       "detected": false,
       "score": 0.0,
       "threshold": 0.5,
@@ -80,14 +80,14 @@
       "interpretation": "Peak autocorrelation 0.24 at lag 5. No significant action loop detected.",
       "version": "1.0.0"
     },
-    "degradation": {
+    "context_decay": {
       "detected": false,
       "score": 0.0,
       "threshold": 0.4,
       "evidence": {
-        "reason": "Agent had 100% success rate throughout — no degradation."
+        "reason": "Agent had 100% success rate throughout — no context_decay."
       },
-      "interpretation": "Agent had 100% success rate throughout — no degradation.",
+      "interpretation": "Agent had 100% success rate throughout — no context_decay.",
       "version": "1.0.0"
     }
   },

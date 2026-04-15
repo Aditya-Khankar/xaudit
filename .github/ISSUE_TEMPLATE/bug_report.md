@@ -5,8 +5,8 @@ title: '[BUG] '
 labels: bug
 ---
 
-**cognidrift version**
-Run `cognidrift --version` and paste the output here.
+**xaudit version**
+Run `xaudit --version` and paste the output here.
 
 **Python version**
 Run `python --version` and paste the output here.
@@ -19,7 +19,7 @@ Describe what you did and what went wrong.
 
 **Command you ran**
 ```bash
-cognidrift analyze --trace ...
+xaudit analyze --trace ...
 ```
 
 **Error message**
