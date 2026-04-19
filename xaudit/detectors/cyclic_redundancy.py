@@ -1,95 +1,137 @@
-"""Detects action loops — agent repeating identical or near-identical
-action sequences via autocorrelation analysis."""
+"""
+Cyclic Redundancy Detector
 
-import numpy as np
+Detects repeated action patterns using Lempel-Ziv complexity from
+algorithmic information theory. Low complexity indicates compressible
+(repetitive) behavior; high complexity indicates diverse exploration.
+
+Method: LZ76 substring counting with n/log₂(n) normalization.
+        Complexity is inverted to produce a redundancy score:
+        high redundancy = repetitive loops detected.
+Field:  Algorithmic information theory, Kolmogorov complexity.
+Reference: Ziv & Lempel (1976), "On the Complexity of Finite Sequences"
+"""
+
+import math
 from xaudit.detectors.base import BaseDetector, DetectorResult
 from xaudit.recorder.trace_recorder import AgentTrace
 
 
+def lz76_complexity(sequence: list[str]) -> float:
+    """
+    Compute normalized Lempel-Ziv complexity (LZ76).
+
+    Measures algorithmic compressibility of an action sequence.
+    Low complexity = repetitive/looping behavior.
+    High complexity = diverse/exploratory behavior.
+
+    Algorithm (LZ76):
+        1. Convert sequence to a single string with unique separator (handled intrinsically if strings)
+        2. Initialize: complexity_count = 1, start scanning from index 1
+        3. At each position, find the longest substring starting here
+           that has already appeared earlier in the sequence
+        4. When a new (unseen) substring is found, increment complexity_count
+        5. Advance past the matched portion + 1 new symbol
+        6. Continue until end of sequence
+
+    Normalization:
+        For sequence length n, theoretical max complexity ≈ n / log₂(n)
+        Return: complexity_count / (n / log₂(n))
+        Capped at 1.0
+
+    Args:
+        sequence: list of action/tool names (strings)
+
+    Returns:
+        float: 0.0 (empty) to ~1.0 (maximally complex)
+    """
+    if len(sequence) == 0:
+        return 0.0
+    if len(sequence) == 1:
+        return 1.0
+
+    n = len(sequence)
+    i = 1
+    complexity_count = 1
+
+    while i < n:
+        # Find longest match of sequence[i:i+length] in sequence
+        max_match_len = 0
+        for length in range(1, n - i + 1):
+            # Current substring to match
+            current = sequence[i:i + length]
+            # Search in all positions before i
+            found = False
+            for j in range(0, i):
+                if sequence[j:j + length] == current:
+                    found = True
+                    break
+            if found:
+                max_match_len = length
+            else:
+                break
+
+        i += max_match_len + 1
+        if i <= n:
+            complexity_count += 1
+
+    # Normalize
+    if n <= 1:
+        return 1.0
+    theoretical_max = n / math.log2(n)
+    normalized = complexity_count / theoretical_max
+    return min(normalized, 1.0)
+
+
 class CyclicRedundancy(BaseDetector):
-    name = "loop_detection"
+    name = "cyclic_redundancy"
     version = "1.0.0"
     threshold = 0.65
 
     def detect(self, trace: AgentTrace) -> DetectorResult:
-        if trace.total_steps < 6:
-            return self._insufficient("Trace too short for loop detection (need 6+ steps).")
+        # Extract ordered list of tools
+        tool_events = [
+            e for e in trace.events
+            if e.event_type in ("tool_call", "retrieval")
+        ]
 
-        # Encode tool sequence as integer array
-        tool_vocab: dict[str, int] = {}
-        counter = 0
-        sequence = []
-        for event in trace.events:
-            tool = event.tool_name or event.event_type
-            if tool not in tool_vocab:
-                tool_vocab[tool] = counter
-                counter += 1
-            sequence.append(tool_vocab[tool])
+        if len(tool_events) == 0:
+            return self._insufficient("No tool events found.")
 
-        seq = np.array(sequence, dtype=float)
-        seq_centered = seq - seq.mean()
+        if len(tool_events) == 1:
+            return self._insufficient("Single tool event — cannot detect pattern with 1 event.")
 
-        # Constant sequence — all same tool — no variance, no loop signal
-        if seq_centered.std() == 0:
-            return DetectorResult(
-                detector_name=self.name,
-                detected=False,
-                score=0.0,
-                threshold=self.threshold,
-                evidence={
-                    "reason": "constant sequence (single tool used throughout)",
-                    "sequence_length": len(sequence),
-                    "unique_tools": 1,
-                },
-                interpretation=(
-                    "Agent used only one tool type throughout. "
-                    "Cannot compute autocorrelation on constant sequence."
-                ),
-                detector_version=self.version,
-            )
+        sequence = [(e.tool_name or e.event_type) for e in tool_events]
 
-        # Autocorrelation
-        autocorr_full = np.correlate(seq_centered, seq_centered, mode="full")
-        autocorr = autocorr_full[len(autocorr_full) // 2:]
+        # Compute complexity using LZ76
+        lz_complexity = lz76_complexity(sequence)
+        
+        # Redundancy is the inverse of complexity
+        redundancy_score = 1.0 - lz_complexity
+        
+        detected = redundancy_score > self.threshold
 
-        # Normalize by zero-lag value
-        zero_lag = autocorr[0]
-        if zero_lag == 0:
-            return self._insufficient("Zero-lag autocorrelation is zero — cannot normalize.")
+        unique_tools = len(set(sequence))
 
-        autocorr_norm = autocorr / zero_lag
+        interpretation_suffix = (
+            "Repetitive loop pattern detected."
+            if detected
+            else "Diverse exploratory pattern, no looping behavior."
+        )
 
-        # Check lags 2–10 (skip lag 0 = self, lag 1 = trivial adjacency)
-        max_lag = min(11, len(autocorr_norm))
-        lag_values = np.abs(autocorr_norm[2:max_lag])
-
-        if len(lag_values) == 0:
-            return self._insufficient("Sequence too short for lag analysis.")
-
-        max_autocorr = float(np.max(lag_values))
-        dominant_lag = int(np.argmax(lag_values)) + 2  # offset for lag 2 start
-
-        score = self._clamp(max_autocorr)
+        complexity_phrases = int(lz_complexity * (len(sequence) / math.log2(len(sequence)))) if len(sequence) > 1 else 1
 
         return DetectorResult(
             detector_name=self.name,
-            detected=score >= self.threshold,
-            score=score,
+            detected=detected,
+            score=redundancy_score,
             threshold=self.threshold,
             evidence={
-                "max_autocorrelation": round(max_autocorr, 3),
-                "dominant_lag": dominant_lag,
+                "lz_complexity": float(round(lz_complexity, 4)),
                 "sequence_length": len(sequence),
-                "unique_tools": len(tool_vocab),
-                "tool_vocabulary": tool_vocab,
+                "unique_actions": unique_tools,
+                "complexity_phrases": complexity_phrases
             },
-            interpretation=(
-                f"Peak autocorrelation {max_autocorr:.2f} at lag {dominant_lag}. "
-                + (
-                    f"Repetitive loop pattern detected — action repeats every ~{dominant_lag} steps."
-                    if score >= self.threshold
-                    else "No significant action loop detected."
-                )
-            ),
+            interpretation=f"Redundancy score: {redundancy_score:.3f}. {interpretation_suffix}",
             detector_version=self.version,
         )

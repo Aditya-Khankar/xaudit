@@ -19,7 +19,7 @@ jobs:
         run: |
           mkdir -p report
           xaudit analyze \
-            --trace ./runs/sample_runs/run_anchoring.json \
+            --trace ./runs/sample_runs/run_primacy_dominance.json \
             --output ./report/ \
             --no-viz
       - name: Upload Behavioral Report

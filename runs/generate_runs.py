@@ -121,9 +121,9 @@ def _run_agent(scenario: dict, client) -> dict:
 def _pick_tool(scenario: dict, step: int, tools: list) -> str:
     """Scenario-specific tool selection logic."""
     bias = scenario.get("bias_type")
-    if bias == "loop" and tools:
+    if bias == "cyclic_redundancy" and tools:
         return tools[step % len(tools)]
-    if bias == "confirmation":
+    if bias == "query_entropy_collapse":
         # Narrow to first tool after step 8
         return tools[0] if step > 8 and tools else (tools[step % len(tools)] if tools else "web_search")
     return tools[step % len(tools)] if tools else "web_search"

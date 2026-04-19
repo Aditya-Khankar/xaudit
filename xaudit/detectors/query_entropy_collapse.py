@@ -41,7 +41,7 @@ def renyi_entropy_alpha2(tool_counts: dict) -> float:
 
 
 class QueryEntropyCollapseDetector(BaseDetector):
-    name = "query_entropy_collapse_bias"
+    name = "query_entropy_collapse"
     version = "1.0.0"
     threshold = 0.40
     window_size = 5
@@ -111,18 +111,14 @@ class QueryEntropyCollapseDetector(BaseDetector):
         initial_entropy = diversity_values[0]
         final_entropy = diversity_values[-1]
         
-        # If all windows have identical entropy, slope will be ~0
-        if np.isclose(slope, 0.0):
+        # Calculate raw score using slope and detection logic
+        if np.isclose(slope, 0.0) or slope > 0:
             score = 0.0
             detected = False
         else:
-            if slope < 0 and initial_entropy > 0 and final_entropy < 0.5 * initial_entropy:
-                drop_ratio = (initial_entropy - final_entropy) / initial_entropy
-                score = self._clamp(drop_ratio)
-                detected = score > self.threshold
-            else:
-                score = 0.0
-                detected = False
+            raw_score = abs(slope)
+            score = min(raw_score / 0.4, 1.0)
+            detected = bool(score > 0.4 and final_entropy < 0.5 * initial_entropy)
 
         # First half vs second half unique tools
         mid = len(tool_events) // 2

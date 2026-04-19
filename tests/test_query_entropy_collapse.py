@@ -146,8 +146,8 @@ def test_stable_diversity_not_detected():
     result = QueryEntropyCollapseDetector().detect(trace)
     assert result.detected is False
 
-def test_empty_trace():
-    """No events → safe default"""
+def test_empty_trace_safe():
+    """Empty trace → safe defaults"""
     trace = make_trace([])
     result = QueryEntropyCollapseDetector().detect(trace)
     assert result.score == 0.0
