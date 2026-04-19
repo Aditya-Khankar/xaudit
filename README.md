@@ -33,7 +33,7 @@ Report saved:   ./demo_output/behavior_report.json
 **Requirements:** Python 3.11+
 
 ```bash
-git clone https://github.com/Aditya-Khankar/xaudit
+git clone https://github.com/Aditya-Khankar/cognidrift
 cd xaudit
 pip install -e .
 xaudit demo
@@ -298,7 +298,7 @@ trace.json → format_detect → adapter → AgentTrace
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for setup instructions and guidelines on adding new detectors or format adapters.
 
-Found a bug? [Open an issue](https://github.com/Aditya-Khankar/xaudit/issues).
+Found a bug? [Open an issue](https://github.com/Aditya-Khankar/cognidrift/issues).
 
 ---
 

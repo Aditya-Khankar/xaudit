@@ -15,7 +15,7 @@ If below 3.11, install from https://python.org/downloads
 ## Standard install (Analysis only — no API key needed)
 
 ```bash
-git clone https://github.com/Aditya-Khankar/xaudit
+git clone https://github.com/Aditya-Khankar/cognidrift
 cd xaudit
 pip install -e .
 xaudit demo

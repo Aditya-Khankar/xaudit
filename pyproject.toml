@@ -42,9 +42,9 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/Aditya-Khankar/xaudit"
-Repository = "https://github.com/Aditya-Khankar/xaudit"
-Issues = "https://github.com/Aditya-Khankar/xaudit/issues"
+Homepage = "https://github.com/Aditya-Khankar/cognidrift"
+Repository = "https://github.com/Aditya-Khankar/cognidrift"
+Issues = "https://github.com/Aditya-Khankar/cognidrift/issues"
 
 [project.scripts]
 xaudit = "xaudit.cli:cli"

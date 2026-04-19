@@ -3,7 +3,7 @@
 ## Setup for development
 
 ```bash
-git clone https://github.com/Aditya-Khankar/xaudit
+git clone https://github.com/Aditya-Khankar/cognidrift
 cd xaudit
 pip install -e ".[dev]"
 ```
