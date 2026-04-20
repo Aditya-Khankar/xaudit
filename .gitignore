@@ -1,0 +1,61 @@
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Test output
+test_output*/
+test_clean/
+test_persistence/
+test_viz*/
+demo_output/
+my_traces/
+my_new_traces/
+/report/
+
+# Scratch test files
+test_part*.py
+test_lz*.py
+test_both*.py
+setup_tests.py
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.eggs/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environment
+.env
+.venv/
+venv/
+env/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Generated artifacts
+behavioral_timeline.png
+generated_*.json
+*.png
+!report/behavioral_timeline_sample.png
+
+# Local artifacts
+/behavior_report.json
+
+# Internal planning documents
+xaudit_complete_prompt.md
+xaudit_context.md
+xaudit_prd.md
+xaudit_techstack.md
